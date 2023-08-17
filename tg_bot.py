@@ -1,12 +1,10 @@
 from environs import Env
 import logging
 
-from google.cloud import api_keys_v2
-from google.cloud.api_keys_v2 import Key
 from google.cloud import dialogflow
 
-from telegram import Update, ForceReply
-from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext
+from telegram import ForceReply
+from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 
 logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO
@@ -62,13 +60,11 @@ def get_dialogflow_sessions(project_id, session_id):
     return session_client, USER_SESSIONS[session_id]
 
 
-
 def main() -> None:
     env = Env()
     env.read_env()
 
     setup_tg_bot(env('TG_TOKEN'), env('GOOGLE_CLOUD_PROJECT'))
-
 
 
 if __name__ == '__main__':
