@@ -24,6 +24,8 @@ def send_reply(event, vk_api, google_project_id):
     response = session_client.detect_intent(
         request={"session": session, "query_input": query_input}
     )
+    if response.query_result.intent.is_fallback:
+        return None
     vk_api.messages.send(
         user_id=event.user_id,
         message=response.query_result.fulfillment_text,
