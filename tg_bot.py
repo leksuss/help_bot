@@ -45,9 +45,10 @@ def main() -> None:
         )
     )
 
+    logger.info(f'Bot tg_bot started')
+
     updater.start_polling()
     updater.idle()
-    logger.info('Bot tg_bot started')
 
 
 if __name__ == '__main__':

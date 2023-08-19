@@ -6,7 +6,7 @@ logger = logging.getLogger(__name__)
 
 
 def create_intent(project_id, display_name, training_phrases_parts, message_texts):
-    logger.info(f'Creating intent {display_name}')
+    logger.info(f'Creating intent {display_name}...')
     intents_client = dialogflow.IntentsClient()
 
     parent = dialogflow.AgentsClient.agent_path(project_id)

@@ -10,7 +10,7 @@ from dialogflow_api import get_dialogflow_answer
 
 logging.basicConfig(
     format='%(asctime)s - %(levelname)s - %(message)s',
-    level=logging.DEBUG,
+    level=logging.INFO,
 )
 logger = logging.getLogger(__name__)
 
@@ -37,7 +37,9 @@ def main():
     vk_session = vk_api.VkApi(token=env('VK_TOKEN'))
     bot = vk_session.get_api()
     longpoll = VkLongPoll(vk_session)
+
     logger.info('Bot vk_bot started')
+
     for event in longpoll.listen():
         if event.type == VkEventType.MESSAGE_NEW and event.to_me:
             send_reply(event, bot, env('GOOGLE_CLOUD_PROJECT'))
