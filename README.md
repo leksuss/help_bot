@@ -1,8 +1,7 @@
 # Help bot
 
-This is a couple of simple bots working in [VK](https://vk.com/) and [Telegram](https://telegram.org/). It is made for answer on ordinary questions from users of some company. Bots are using [DialogFlow Google AI service](https://dialogflow.cloud.google.com/). That means bots can understand different phorms of one phrase.
-Here is a working examples:
- - 
+This is a couple of simple bots working in [VK](https://vk.com/) and [Telegram](https://telegram.org/). It is made for answer on ordinary questions from users of some company. Bots are using [DialogFlow Google AI service](https://dialogflow.cloud.google.com/). That means bots can understand different phorms of one phrase. Look at this magic:
+<p align="center"><img src="https://github.com/leksuss/help_bot/blob/main/.github/tg_bot_example.gif"></p>
 
 ## Requirements
 
