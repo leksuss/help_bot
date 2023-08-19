@@ -8,7 +8,8 @@ from dialogflow_api import get_dialogflow_answer
 
 
 logging.basicConfig(
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO
+    format='%(asctime)s - %(levelname)s - %(message)s',
+    level=logging.INFO,
 )
 logger = logging.getLogger(__name__)
 
@@ -19,6 +20,7 @@ def start(update, _):
         fr'Здравствуйте, {user.mention_markdown_v2()}\!',
         reply_markup=ForceReply(selective=True),
     )
+    logger.info(f'User {update.effective_user.id} push start')
 
 
 def send_reply(update, project_id):
@@ -34,7 +36,7 @@ def main() -> None:
     env = Env()
     env.read_env()
 
-    updater = Updater(env('TG_TOKEN'), use_context=True)
+    updater = Updater(env('TG_TOKEN'))
     updater.dispatcher.add_handler(CommandHandler("start", start))
     updater.dispatcher.add_handler(
         MessageHandler(
@@ -45,6 +47,7 @@ def main() -> None:
 
     updater.start_polling()
     updater.idle()
+    logger.info('Bot tg_bot started')
 
 
 if __name__ == '__main__':

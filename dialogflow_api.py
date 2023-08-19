@@ -6,6 +6,7 @@ logger = logging.getLogger(__name__)
 
 
 def create_intent(project_id, display_name, training_phrases_parts, message_texts):
+    logger.info(f'Creating intent {display_name}')
     intents_client = dialogflow.IntentsClient()
 
     parent = dialogflow.AgentsClient.agent_path(project_id)
@@ -25,7 +26,7 @@ def create_intent(project_id, display_name, training_phrases_parts, message_text
     response = intents_client.create_intent(
         request={"parent": parent, "intent": intent}
     )
-    logger.info(f'Intent created: {response}')
+    logger.info(f'Intent {display_name} created with response: {response}')
 
 
 
@@ -39,5 +40,7 @@ def get_dialogflow_answer(user_id, user_text, project_id, is_fallback=False):
         request={'session': session, 'query_input': query_input}
     )
     if is_fallback and response.query_result.intent.is_fallback:
+        logger.debug(f"Bot don't understand user's answer")
         return None
+    logger.debug(f'User asked {user_text}, bot answer: {response}')
     return response.query_result.fulfillment_text
