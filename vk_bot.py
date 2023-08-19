@@ -6,12 +6,9 @@ import vk_api
 from vk_api.longpoll import VkLongPoll, VkEventType
 
 from dialogflow_api import get_dialogflow_answer
+from log_handler import TelegramLogsHandler
 
 
-logging.basicConfig(
-    format='%(asctime)s - %(levelname)s - %(message)s',
-    level=logging.INFO,
-)
 logger = logging.getLogger(__name__)
 
 
@@ -34,6 +31,11 @@ def main():
     env = Env()
     env.read_env()
 
+    handler = TelegramLogsHandler(env('TG_LOGBOT_TOKEN'), env('ADMIN_TG_CHAT_ID'))
+    handler.setFormatter(logging.Formatter('%(message)s'))
+    logger.setLevel(logging.INFO)
+    logger.addHandler(handler)
+
     vk_session = vk_api.VkApi(token=env('VK_TOKEN'))
     bot = vk_session.get_api()
     longpoll = VkLongPoll(vk_session)
@@ -42,8 +44,10 @@ def main():
 
     for event in longpoll.listen():
         if event.type == VkEventType.MESSAGE_NEW and event.to_me:
-            send_reply(event, bot, env('GOOGLE_CLOUD_PROJECT'))
-
+            try:
+                send_reply(event, bot, env('GOOGLE_CLOUD_PROJECT'))
+            except Exception as e:
+                logger.exception(e)
 
 
 if __name__ == "__main__":

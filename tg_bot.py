@@ -5,12 +5,9 @@ from telegram import ForceReply
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 
 from dialogflow_api import get_dialogflow_answer
+from log_handler import TelegramLogsHandler
 
 
-logging.basicConfig(
-    format='%(asctime)s - %(levelname)s - %(message)s',
-    level=logging.INFO,
-)
 logger = logging.getLogger(__name__)
 
 
@@ -24,24 +21,32 @@ def start(update, _):
 
 
 def send_reply(update, project_id):
-    reply = get_dialogflow_answer(
-        update.effective_user.id,
-        update.message.text,
-        project_id,
-    )
-    update.message.reply_text(reply)
+    try:
+        reply = get_dialogflow_answer(
+            update.effective_user.id,
+            update.message.text,
+            project_id,
+        )
+        update.message.reply_text(reply)
+    except Exception as e:
+        logger.exception(e)
 
 
 def main() -> None:
     env = Env()
     env.read_env()
 
+    handler = TelegramLogsHandler(env('TG_LOGBOT_TOKEN'), env('ADMIN_TG_CHAT_ID'))
+    handler.setFormatter(logging.Formatter('%(message)s'))
+    logger.setLevel(logging.INFO)
+    logger.addHandler(handler)
+
     updater = Updater(env('TG_TOKEN'))
     updater.dispatcher.add_handler(CommandHandler("start", start))
     updater.dispatcher.add_handler(
         MessageHandler(
             Filters.text & ~Filters.command,
-            lambda update, context: send_reply(update, env('GOOGLE_CLOUD_PROJECT'))
+            lambda update, _: send_reply(update, env('GOOGLE_CLOUD_PROJECT'))
         )
     )
 
