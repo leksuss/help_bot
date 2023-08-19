@@ -31,7 +31,11 @@ def main():
     env = Env()
     env.read_env()
 
-    handler = TelegramLogsHandler(env('TG_LOGBOT_TOKEN'), env('ADMIN_TG_CHAT_ID'))
+    if env('TG_LOGBOT_TOKEN', None) and env('ADMIN_TG_CHAT_ID', None):
+        handler = TelegramLogsHandler(env('TG_LOGBOT_TOKEN'), env('ADMIN_TG_CHAT_ID'))
+    else:
+        handler = logging.StreamHandler()
+
     handler.setFormatter(logging.Formatter('%(message)s'))
     logger.setLevel(logging.INFO)
     logger.addHandler(handler)
