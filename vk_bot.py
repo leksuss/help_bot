@@ -13,16 +13,15 @@ logger = logging.getLogger(__name__)
 
 
 def send_reply(event, bot, project_id):
-    dialogflow_reply = get_dialogflow_answer(
+    query_result = get_dialogflow_answer(
         event.user_id,
         event.text,
         project_id,
-        is_fallback=True
     )
-    if dialogflow_reply:
+    if not query_result.intent.is_fallback:
         bot.messages.send(
             user_id=event.user_id,
-            message=dialogflow_reply,
+            message=query_result.fulfillment_text,
             random_id=random.randint(1,1000),
         )
 

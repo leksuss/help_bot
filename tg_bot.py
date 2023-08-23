@@ -22,12 +22,12 @@ def start(update, _):
 
 def send_reply(update, project_id):
     try:
-        reply = get_dialogflow_answer(
+        query_result = get_dialogflow_answer(
             update.effective_user.id,
             update.message.text,
             project_id,
         )
-        update.message.reply_text(reply)
+        update.message.reply_text(query_result.fulfillment_text)
     except Exception as e:
         logger.exception(e)
 
