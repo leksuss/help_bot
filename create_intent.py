@@ -6,10 +6,6 @@ from environs import Env
 from dialogflow_api import create_intent
 
 
-logging.basicConfig(
-    format='%(asctime)s - %(levelname)s - %(message)s',
-    level=logging.INFO,
-)
 logger = logging.getLogger(__name__)
 
 
@@ -30,6 +26,11 @@ def read_args():
 
 
 def run():
+    handler = logging.StreamHandler()
+    handler.setFormatter(logging.Formatter('%(message)s'))
+    logger.setLevel(logging.INFO)
+    logger.addHandler(handler)
+
     logger.info('start script')
     args = read_args()
     env = Env()
